@@ -22,7 +22,7 @@ BUILD_BROKEN_INCORRECT_PARTITION_IMAGES := true
 
 BOARD_VENDOR := sony
 
-COMMON_PATH := device/sony/sm8550-common
+COMMON_PATH := device/sony/sm8650-common
 
 # A/B
 AB_OTA_UPDATER := true
@@ -66,10 +66,10 @@ BOARD_RAMDISK_USE_LZ4 := true
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 BOARD_USES_QCOM_MERGE_DTBS_SCRIPT := true
 TARGET_NEEDS_DTBOIMAGE := true
-TARGET_MERGE_DTBS_WILDCARD ?= kalama*base
+TARGET_MERGE_DTBS_WILDCARD ?= pineapple*base
 
 # Bootloader
-TARGET_BOOTLOADER_BOARD_NAME := kalama
+TARGET_BOOTLOADER_BOARD_NAME := pineapple
 TARGET_NO_BOOTLOADER := true
 
 # Init Boot
@@ -89,11 +89,11 @@ BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_IMAGE_NAME := Image
 
-TARGET_KERNEL_SOURCE := kernel/sony/sm8550
+TARGET_KERNEL_SOURCE := kernel/sony/sm8650
 TARGET_KERNEL_CONFIG := \
     gki_defconfig \
-    vendor/kalama_GKI.config \
-    vendor/sony/kalama_GKI.config \
+    vendor/pineapple_GKI.config \
+    vendor/sony/pineapple_GKI.config \
     vendor/debugfs.config
 
 BOARD_SYSTEM_KERNEL_MODULES_LOAD := $(strip $(shell cat $(COMMON_PATH)/modules.load.system_dlkm))
@@ -106,7 +106,7 @@ BOOT_KERNEL_MODULES := $(strip $(shell cat $(COMMON_PATH)/modules.load.recovery 
 SYSTEM_KERNEL_MODULES := $(strip $(shell cat $(COMMON_PATH)/modules.include.system_dlkm))
 
 # Kernel Modules
-TARGET_KERNEL_EXT_MODULE_ROOT := kernel/sony/sm8550-modules
+TARGET_KERNEL_EXT_MODULE_ROOT := kernel/sony/sm8650-modules
 TARGET_KERNEL_EXT_MODULES := \
     qcom/opensource/mmrm-driver \
     qcom/opensource/mm-drivers/hw_fence \
@@ -136,7 +136,7 @@ TARGET_KERNEL_EXT_MODULES := \
     sony/lxs_ts
 
 # Platform
-TARGET_BOARD_PLATFORM := kalama
+TARGET_BOARD_PLATFORM := pineapple
 
 # Qcom
 BOARD_USES_QCOM_HARDWARE := true
@@ -301,4 +301,4 @@ WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 WPA_SUPPLICANT_VERSION := VER_0_8_X
 
--include vendor/sony/sm8550-common/BoardConfigVendor.mk
+-include vendor/sony/sm8650-common/BoardConfigVendor.mk
