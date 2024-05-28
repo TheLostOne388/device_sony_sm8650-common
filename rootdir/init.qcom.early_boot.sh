@@ -1,6 +1,7 @@
 #! /vendor/bin/sh
 
 # Copyright (c) 2012-2013,2016,2018-2020 The Linux Foundation. All rights reserved.
+# Copyright 2022, 2023 Sony Corporation
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -410,6 +411,20 @@ case "$baseband" in
     *)
         setprop persist.vendor.radio.atfwd.start true;;
 esac
+
+#For wifi driver
+default_ini=/vendor/etc/wifi/kiwi_v2/WCNSS_qcom_cfg.ini
+customized_ini=/mnt/vendor/persist/wifi/kiwi_v2/WCNSS_qcom_cfg.ini
+cat $default_ini > $customized_ini
+gWifi6eCCList=`getprop ro.vendor.sony.wlan.6e_cc_list`
+if [ $gWifi6eCCList ]; then
+    sed -i '$a'gWifi6eCCList=''''$gWifi6eCCList'''' $customized_ini
+fi
+build_type=`getprop ro.build.type`
+if [ "$build_type" = "userdebug" ]; then
+    sed -i '$agEnableDiscTimeLog=1' $customized_ini
+fi
+sed -i '$aEND' $customized_ini
 
 #set default lcd density
 #Since lcd density has read only

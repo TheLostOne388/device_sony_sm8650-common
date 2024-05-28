@@ -8,4 +8,27 @@
 /dev/block/platform/soc/1d84000.ufshc/by-name/TA        0660   oem_2997   oem_2997
 
 # Charger
-/sys/class/battchg_ext  smart_charging_interruption  0660  system  system
+/sys/class/battchg_ext usb_input_suspend           0664 root root
+/sys/class/battchg_ext lrc_charge_disable          0664 root root
+/sys/class/battchg_ext lrc_input_suspend           0664 root root
+/sys/class/battchg_ext batt_aging_level            0664 root root
+/sys/class/battchg_ext bootup_shutdown_phase       0664 root root
+/sys/class/battchg_ext system_temp_level           0664 root root
+/sys/class/battchg_ext restored_capacity           0664 root root
+/sys/class/battchg_ext smart_charging_activation   0664 system system
+/sys/class/battchg_ext smart_charging_interruption 0664 system system
+
+/sys/class/qcom-battery wireless_boost_en          0664 root root
+/sys/class/qcom-battery ship_mode_en               0664 root root
+
+/sys/class/power_supply/battery uevent             0664 root root
+/sys/class/power_supply/wireless uevent            0664 root root
+/sys/class/power_supply/usb uevent                 0664 root root
+
+/sys/class/battman_dbg log_interval                0664 root root
+/sys/class/battman_dbg log_categories              0664 root root
+/sys/class/battman_dbg log_level                   0664 root root
+/sys/class/battman_dbg regupdate_interval          0664 root root
+
+# Fingerprint sensor
+/dev/esfp0                                         0600 system system
