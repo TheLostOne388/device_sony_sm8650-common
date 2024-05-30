@@ -58,20 +58,6 @@ if [ -z "${SRC}" ]; then
     SRC="adb"
 fi
 
-function blob_fixup() {
-    case "${1}" in
-        vendor/bin/hw/android.hardware.security.keymint-service-qti|vendor/bin/hw/vendor.semc.hardware.secd@1.1-service|vendor/bin/keyprovd)
-            grep -q "android.hardware.security.rkp-V3-ndk.so" "${2}" || ${PATCHELF} --add-needed "android.hardware.security.rkp-V3-ndk.so" "${2}"
-            ;;
-        vendor/bin/slim_daemon)
-            ${PATCHELF} --add-needed "libc++_shared.so" "${2}"
-            ;;
-        vendor/etc/msm_irqbalance.conf)
-            sed -i "s/IGNORED_IRQ=27,23,38$/&,115,332/" "${2}"
-            ;;
-    esac
-}
-
 if [ -z "${ONLY_TARGET}" ]; then
     # Initialize the helper for common device
     setup_vendor "${DEVICE_COMMON}" "${VENDOR_COMMON:-$VENDOR}" "${ANDROID_ROOT}" true "${CLEAN_VENDOR}"
