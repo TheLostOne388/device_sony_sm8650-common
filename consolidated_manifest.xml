@@ -3,7 +3,7 @@
      Copyright (C) 2024 The LineageOS Project
      SPDX-License-Identifier: BSD-3-Clause
 -->
-<manifest version="8.0" type="device" target-level="15" level="15">
+<manifest version="8.0" type="device" target-level="8" level="8">
     <!-- Core Android HALs -->
     <hal format="hidl">
         <name>android.hardware.audio</name>
@@ -513,7 +513,7 @@
         </interface>
     </hal>
     
-    <kernel target-level="15"/>
+    <kernel target-level="8"/>
     <sepolicy>
         <version>34.0</version>
     </sepolicy>
