@@ -484,7 +484,6 @@
     
     <!-- System HALs -->
     <hal format="hidl">
-        <name>android.system.wifi.keystore</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
         <interface>
