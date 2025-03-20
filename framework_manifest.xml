@@ -1,4 +1,4 @@
-<manifest version="1.0" type="framework">
+<manifest version="1.0" type="framework" sepolicy-version="202404">
     <hal format="hidl">
         <name>vendor.qti.hardware.qccsyshal</name>
         <transport>hwbinder</transport>

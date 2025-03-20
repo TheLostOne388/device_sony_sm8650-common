@@ -130,7 +130,7 @@ TARGET_HEALTH_CHARGING_CONTROL_CHARGING_ENABLED := 0
 TARGET_HEALTH_CHARGING_CONTROL_CHARGING_DISABLED := 1
 
 # HIDL
-DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += \
     $(COMMON_PATH)/framework_compatibility_matrix.xml \
     hardware/qcom-caf/common/vendor_framework_compatibility_matrix.xml \
     vendor/lineage/config/device_framework_matrix.xml
@@ -210,7 +210,10 @@ VENDOR_SECURITY_PATCH := $(BOOT_SECURITY_PATCH)
 include device/qcom/sepolicy_vndr/SEPolicy.mk
 # include hardware/sony/sepolicy/qti/SEPolicy.mk
 
-BOARD_SEPOLICY_VERS := 34.0
+# SEPolicy versions
+BOARD_SEPOLICY_VERS := 202404
+PLATFORM_SEPOLICY_VERSION := 202404
+BOARD_SEPOLICY_VERS_API := 34
 
 BOARD_AVB_ALGORITHM := SHA256
 
