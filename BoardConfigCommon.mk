@@ -211,9 +211,9 @@ include device/qcom/sepolicy_vndr/SEPolicy.mk
 # include hardware/sony/sepolicy/qti/SEPolicy.mk
 
 # SEPolicy versions
-BOARD_SEPOLICY_VERS := 202404
+BOARD_SEPOLICY_VERS := 30
 PLATFORM_SEPOLICY_VERSION := 202404
-BOARD_SEPOLICY_VERS_API := 34
+BOARD_SEPOLICY_VERS_API := 30
 
 BOARD_AVB_ALGORITHM := SHA256
 
