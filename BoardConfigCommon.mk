@@ -23,24 +23,6 @@ BOARD_VENDOR := sony
 
 COMMON_PATH := device/sony/sm8650-common
 
-# A/B
-AB_OTA_UPDATER := true
-
-AB_OTA_PARTITIONS += \
-    boot \
-    dtbo \
-    init_boot \
-    product \
-    system \
-    system_dlkm \
-    system_ext \
-    vbmeta \
-    vbmeta_system \
-    odm \
-    vendor \
-    vendor_dlkm \
-    vendor_boot
-
 # Architecture
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv9-a
@@ -77,16 +59,10 @@ BOARD_KERNEL_PAGESIZE := 4096
 
 TARGET_FORCE_PREBUILT_KERNEL := true
 TARGET_NO_KERNEL_OVERRIDE := true
-# TARGET_KERNEL_SOURCE := $(KERNEL_PATH)/kernel-headers
-#PRODUCT_COPY_FILES += \
-#  $(KERNEL_PATH)/kernel:kernel
 
 BOARD_BOOTCONFIG := \
     androidboot.hypervisor.protected_vm.supported=true \
     androidboot.load_modules_parallel=true \
-
-# Virtualization service
-# $(call inherit-product, packages/modules/Virtualization/apex/product_packages.mk)
 
 # Platform
 TARGET_BOARD_PLATFORM := pineapple
@@ -196,7 +172,6 @@ TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 PRODUCT_REPACK_RECOVERY_IMAGES := true
-
 
 # RIL
 ENABLE_VENDOR_RIL_SERVICE := true
