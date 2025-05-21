@@ -265,4 +265,3 @@ BOARD_WLAN_DIR := hardware/qcom-caf/sm8650/wifi
 WLAN_PLATFORM_DRIVERS_LIST := $(BOARD_WLAN_DIR)
 TARGET_WLAN_OVERRIDE_PATH := hardware/qcom-caf/sm8650/wifi
 BOARD_WLAN_SKIP_COMMON_HAL := true
-
