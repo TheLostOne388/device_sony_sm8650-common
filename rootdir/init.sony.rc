@@ -22,11 +22,18 @@ on boot
     chown system system /sys/devices/virtual/input/lxs_ts_input/enable_knock
     chown system system /sys/devices/dsi_panel_driver/pre_sod_mode
 
+    # modem link
+    chown radio radio /sys/devices/platform/soc/1d80000.qcom,icnss/net/wlan0/queues/rx-0/rps_cpus
+
 on post-fs
     # radio
     exec_start msim_sh
     setprop persist.radio.multisim.config ${vendor.radio.multisim.config}
     setprop ro.vendor.ltalabel.model ${vendor.radio.ltalabel.model}
+
+    # Create ota directory and set context for update_engine
+    mkdir /metadata/ota 0770 system system
+    restorecon /metadata/ota
 
 on property:vendor.post_boot.parsed=1
     # IRQ Tuning

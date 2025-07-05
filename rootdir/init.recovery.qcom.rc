@@ -21,7 +21,7 @@
 # PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
 # OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
 # WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
-# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+# OTHERWISE) ARISING IN ANY WAY OUT of THE USE OF THIS SOFTWARE, EVEN IF
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
@@ -42,3 +42,16 @@ on property:ro.boot.usbcontroller=*
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+
+on early-init
+    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules q6_pdr_dlkm q6_notifier_dlkm
+
+on boot
+    start health-hal-2-1
+
+on post-fs
+    # Ensure /metadata is mounted with safe flags
+    mount f2fs /dev/block/by-name/metadata /metadata noatime,nosuid,nodev || true
+    # Create ota directory and set context for update_engine
+    mkdir /metadata/ota 0770 system system
+    restorecon /metadata/ota
