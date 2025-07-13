@@ -28,7 +28,6 @@
 on init
     write /sys/class/backlight/panel0-backlight/brightness 200
     setprop sys.usb.configfs 1
-    setenforce 0
 
 on property:ro.boot.usbcontroller=*
     setprop sys.usb.controller ${ro.boot.usbcontroller}
@@ -48,12 +47,6 @@ on boot
     write /sys/devices/virtual/input/lxs_ts_input/after_probe 1
     start health-hal-2-1
 
-service create_mappings /system/bin/sh -c "touch /tmp/service_touch && sleep 3600"
-    class main
-    user root
-    group root
-    oneshot
-
 on late-init
     # Ensure /metadata is mounted with safe flags
     mount ext4 /dev/block/by-name/metadata /metadata noatime,nosuid,nodev || true
@@ -61,5 +54,6 @@ on late-init
     mkdir /metadata/ota 0770 system system
     restorecon /metadata/ota
     write /tmp/init_log "--- Entering late-init ---"
-    class_start main
-    write /tmp/init_log "--- Started main class ---"
+    # Execute mapping script. Using sh to ensure proper environment.
+    exec -- /system/bin/sh /system/bin/create_mappings.sh
+    write /tmp/init_log "--- Exec completed ---"

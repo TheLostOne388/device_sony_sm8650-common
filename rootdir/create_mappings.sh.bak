@@ -1,0 +1,3 @@
+#!/system/bin/sh
+
+/system/bin/lptodm /dev/block/by-name/super | while read -r line; do /system/bin/dmctl $line; done 

@@ -189,7 +189,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.fingerprint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.fingerprint.xml
 
-# Fatab
+# Fstab
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/fstab.default:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.qcom \
     $(LOCAL_PATH)/rootdir/fstab.default:$(TARGET_COPY_OUT_RECOVERY)/root/first_stage_ramdisk/fstab.qcom \
@@ -259,8 +259,10 @@ PRODUCT_PACKAGES += \
     init.sony-device-common.rc \
     init.sony-platform.rc \
     init.sony.rc \
-    ueventd.qcom.rc \
-    ueventd.sony.rc
+    ueventd.qcom.rc
+
+# Recovery scripts
+PRODUCT_COPY_FILES += $(LOCAL_PATH)/rootdir/create_mappings.sh:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/create_mappings.sh
 
 # Keymaster
 PRODUCT_PACKAGES += \
@@ -541,7 +543,6 @@ PRODUCT_PACKAGES += \
     wpa_supplicant \
     wpa_supplicant.conf
 
-# WiFi permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.direct.xml \
     frameworks/native/data/etc/android.hardware.wifi.passpoint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.passpoint.xml \
@@ -604,4 +605,6 @@ PRODUCT_PACKAGES += \
 DEVICE_MATRIX_FILE += \
     $(DEVICE_PATH)/compatibility_matrix.device.xml
 
-
+# Recovery scripts
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/create_mappings.sh:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/create_mappings.sh
