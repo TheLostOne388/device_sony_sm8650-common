@@ -28,7 +28,7 @@
 on init
     write /sys/class/backlight/panel0-backlight/brightness 200
     setprop sys.usb.configfs 1
-    setenforce 0
+    exec /system/bin/sh /system/bin/set_permissive.sh
 
 on property:ro.boot.usbcontroller=*
     setprop sys.usb.controller ${ro.boot.usbcontroller}
@@ -41,25 +41,48 @@ on fs
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
 
 on early-init
-    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules q6_pdr_dlkm q6_notifier_dlkm
+    # setenforce 0 is invalid here; SELinux is handled by kernel cmdline.
+    # We can't write to /tmp yet, so logging is moved to post-fs-data.
 
-on boot
-    wait /sys/devices/virtual/input/lxs_ts_input/after_probe
-    write /sys/devices/virtual/input/lxs_ts_input/after_probe 1
-    start health-hal-2-1
+on post-fs-data
+    # Mount /tmp early for logging
+    mkdir /tmp 0777 root root
+    mount tmpfs tmpfs /tmp mode=0777
+    write /tmp/init_log "--- Mounted /tmp in post-fs-data ---"
+    
+    # Test writing to the newly mounted /tmp
+    write /tmp/test.txt "Test write successful"
+    write /tmp/init_log "--- Test write to /tmp/test.txt done ---"
 
-service create_mappings /system/bin/sh -c "touch /tmp/service_touch && sleep 3600"
-    class main
-    user root
-    group root
-    oneshot
+    # Start the partition copy service
+    start copy_partitions
 
 on late-init
-    # Ensure /metadata is mounted with safe flags
-    mount ext4 /dev/block/by-name/metadata /metadata noatime,nosuid,nodev || true
-    # Create ota directory and set context for update_engine
+    # Execute the mapping script as a oneshot service
+    start create_mappings
+
+    # Format /metadata as ext4, create directories, and set permissions
+    # This is done here to ensure it happens after all other mounts and services.
+    umount /metadata
+    exec u:r:recovery:s0 -- /system/bin/make_ext4fs -l 64M -a metadata /dev/block/by-name/metadata
+    mount ext4 /dev/block/by-name/metadata /metadata noatime,nosuid,nodev,discard
     mkdir /metadata/ota 0770 system system
-    restorecon /metadata/ota
-    write /tmp/init_log "--- Entering late-init ---"
-    class_start main
-    write /tmp/init_log "--- Started main class ---"
+    mkdir /metadata/ota/snapshots 0770 system system
+    mkdir /metadata/gsi 0770 system system
+    mkdir /metadata/apex 0770 system system
+    restorecon -R /metadata
+
+service copy_partitions /system/bin/sh -c "/system/bin/copy_partitions.sh"
+    class core
+    user root
+    group root
+    seclabel u:r:recovery:s0
+    oneshot
+
+service create_mappings /system/bin/sh -c "/system/bin/create_mappings.sh"
+    class core
+    user root
+    group root
+    seclabel u:r:recovery:s0
+    oneshot
+    disabled  # This service will be enabled and started in late-init
