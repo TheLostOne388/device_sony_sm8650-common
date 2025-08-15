@@ -45,7 +45,6 @@ PRODUCT_PACKAGES += \
     android.hardware.audio.service \
     android.hardware.bluetooth.audio-impl \
     android.hardware.soundtrigger@2.3-impl \
-    audio.bluetooth.default \
     audio.primary.pineapple \
     audio.r_submix.default \
     audio.usb.default \

@@ -195,7 +195,7 @@ persist.vendor.dpm.vndr.halservice.enable=1
 persist.vendor.dpm.vndr.feature=11
 
 # DRM
-drm.service.enabled=true
+drm.service.enabled=false
 
 # FRP
 ro.frp.pst=/dev/block/bootdevice/by-name/frp
