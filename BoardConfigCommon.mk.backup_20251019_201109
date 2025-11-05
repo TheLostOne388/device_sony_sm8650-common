@@ -34,7 +34,8 @@ BOARD_BOOT_HEADER_VERSION := 4
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
 BOARD_RAMDISK_USE_LZ4 := true
 
-# DTB/DTBO - Device-specific, configured in device BoardConfig.mk
+# DTB
+# BOARD_KERNEL_SEPARATED_DTBO := true
 
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := pineapple
@@ -44,46 +45,23 @@ TARGET_NO_BOOTLOADER := true
 BOARD_INIT_BOOT_HEADER_VERSION := 4
 BOARD_MKBOOTIMG_INIT_ARGS += --header_version $(BOARD_INIT_BOOT_HEADER_VERSION)
 
-# Kernel - Built from Sony OFFICIAL SM8650 source (69.1.A.2.268)
-TARGET_NO_KERNEL := false
-TARGET_NO_KERNEL_OVERRIDE := false
-TARGET_KERNEL_SOURCE := kernel/sony/sm8650
-TARGET_KERNEL_CONFIG := \
-    gki_defconfig \
-    vendor/pineapple_GKI.config
-BOARD_KERNEL_IMAGE_NAME := Image
-TARGET_KERNEL_ARCH := arm64
-TARGET_KERNEL_HEADER_ARCH := arm64
-# TARGET_FORCE_PREBUILT_KERNEL must be unset to build from source
-
-# Disable format string errors (Sony kernel has minor format mismatches)
-TARGET_KERNEL_ADDITIONAL_FLAGS := KCFLAGS="-Wno-error=format"
-
-# External kernel modules - Disabled for initial boot test
-# Sony's modules use Bazel and have Soong visibility issues
-# Will integrate modules after kernel boots successfully
-# TARGET_KERNEL_EXT_MODULE_ROOT := kernel/sony/sm8650-modules
-
-# Kernel Headers
-BOARD_HEADER_LIBRARIES += \
-    generated_kernel_headers \
-    qti_kernel_headers
-
-# Kernel Boot Configuration
+# Kernel
+# BOARD_KERNEL_CMDLINE += video=vfb:640x400,bpp=32,memsize=3072000
+# BOARD_KERNEL_CMDLINE += nosoftlockup
 BOARD_BOOTCONFIG := \
     androidboot.hardware=qcom \
     androidboot.memcg=1 \
-    androidboot.hypervisor.protected_vm.supported=true \
-    androidboot.load_modules_parallel=true \
-    console=ttyMSM0,115200n8 \
-    earlycon=msm_geni_serial,0x04C8D000
 
-# GKI v4 Boot Image Layout
+# BOARD_USES_GENERIC_KERNEL_IMAGE := true
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 4096
-BOARD_KERNEL_COMPRESSION := none
-BOARD_EXCLUDE_KERNEL_RAMDISK := true
-BOARD_USES_GENERIC_KERNEL_IMAGE := false
+
+TARGET_FORCE_PREBUILT_KERNEL := false
+TARGET_NO_KERNEL_OVERRIDE := true
+
+BOARD_BOOTCONFIG := \
+    androidboot.hypervisor.protected_vm.supported=true \
+    androidboot.load_modules_parallel=true \
 
 # Platform
 TARGET_BOARD_PLATFORM := pineapple
@@ -151,13 +129,12 @@ BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 117440512
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 104857600
 # Reserve space for data encryption (231519965184-16384)
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 231519948800
-# Filesystem types - Use erofs for modern Android
 BOARD_ODMIMAGE_FILE_SYSTEM_TYPE := erofs
-BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := erofs
-BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := erofs
-BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := erofs
-BOARD_SYSTEM_DLKMIMAGE_FILE_SYSTEM_TYPE := erofs
-BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := erofs
+BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_SYSTEM_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
+#BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := erofs
 BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := erofs
 BOARD_SOMC_DYNAMIC_PARTITIONS_PARTITION_LIST := product system system_dlkm vendor odm system_ext vendor_dlkm
 # Dynamic partition size = Super partition size - 4MB
@@ -255,40 +232,8 @@ BOARD_WLAN_SKIP_COMMON_HAL := true
 TARGET_BOARD_INFO_FILE := $(DEVICE_PATH)/board-info.txt
 TARGET_INIT_VENDOR_LIB := //device/sony/sm8650-common:libinit_sm8650
 
-# A/B OTA Updates
-AB_OTA_UPDATER := true
-
-# Minimal dummy post-install step to satisfy payload generator
-AB_OTA_POSTINSTALL_CONFIG += \
-    RUN_POSTINSTALL_system=true \
-    POSTINSTALL_PATH_system=system/bin/true \
-    FILESYSTEM_TYPE_system=ext4 \
-    POSTINSTALL_OPTIONAL_system=true \
-    RUN_POSTINSTALL_vendor=false \
-    FILESYSTEM_TYPE_vendor=ext4 \
-    RUN_POSTINSTALL_product=false \
-    FILESYSTEM_TYPE_product=ext4
-
-AB_OTA_PARTITIONS := \
-    system \
-    system_ext \
-    product \
-    vendor \
-    odm \
-    system_dlkm \
-    vendor_dlkm \
-    boot \
-    init_boot \
-    vbmeta \
-    vbmeta_system \
-    recovery \
-    vendor_boot
-
-# Dynamic Partitions
-BOARD_USES_DYNAMIC_PARTITIONS := true
-BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
-BOARD_BUILD_SUPER_IMAGE := true
-
 # Recovery Tools
 TARGET_RECOVERY_UTILS_PROGS += mkfs.f2fs
 TW_INCLUDE_F2FS_TOOLS := true
+
+BOARD_BOOTCONFIG += console=ttyMSM0,115200n8 earlycon=msm_geni_serial,0x04C8D000
